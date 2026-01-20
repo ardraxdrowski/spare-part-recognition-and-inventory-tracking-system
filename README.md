@@ -20,3 +20,9 @@ Where:
 - \(D_{cont}\): Downtime contribution (weight \(W_d = 0.30\))
 
 Using this formula, we selected the top 5 most critical spare parts for dataset collection and model training.
+
+## Phase 2: Dataset Configuration
+We configured the initial dataset to label the first batch of critical spare parts:
+- Digital Temperature Controller Module
+- Permanent Magnetic DC Motor
+- Hand Sealer Controller Module w/o CT

@@ -1,0 +1,11 @@
+path: C:/Users/admin/Desktop/SPAREPARTRECOGNITIONMODEL_v5/dataset
+train: images/train
+val: images/val
+test: images/test
+
+nc: 3
+
+names:
+  - Digital Temperature Controller Module
+  - Permanent Magnetic DC Motor
+  - Hand Sealer Controller Module w/o CT
