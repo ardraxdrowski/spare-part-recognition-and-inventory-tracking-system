@@ -26,3 +26,7 @@ We configured the initial dataset to label the first batch of critical spare par
 - Digital Temperature Controller Module
 - Permanent Magnetic DC Motor
 - Hand Sealer Controller Module w/o CT
+
+## Phase 3: Dataset Splitting & Preprocessing
+To prepare the images for training, we developed data preparation pipelines to shuffle and split raw image uploads into training, validation, and testing sets using a 70/15/15 ratio.
+This ensures proper evaluation metrics and prevents overfitting.
