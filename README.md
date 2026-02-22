@@ -30,3 +30,6 @@ We configured the initial dataset to label the first batch of critical spare par
 ## Phase 3: Dataset Splitting & Preprocessing
 To prepare the images for training, we developed data preparation pipelines to shuffle and split raw image uploads into training, validation, and testing sets using a 70/15/15 ratio.
 This ensures proper evaluation metrics and prevents overfitting.
+
+## Phase 4: Model Training
+We trained a custom object detection model using **YOLOv8** (nano configuration) to locate and identify critical machine parts in real-time.
