@@ -33,3 +33,6 @@ This ensures proper evaluation metrics and prevents overfitting.
 
 ## Phase 4: Model Training
 We trained a custom object detection model using **YOLOv8** (nano configuration) to locate and identify critical machine parts in real-time.
+
+## Phase 5: Inventory Database Setup
+An SQLite database (`part_details.db`) was introduced to map detected parts directly to operational metadata. This allows the system to look up pricing and current stock levels dynamically.
