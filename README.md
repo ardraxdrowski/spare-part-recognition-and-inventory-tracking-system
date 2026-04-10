@@ -36,3 +36,6 @@ We trained a custom object detection model using **YOLOv8** (nano configuration)
 
 ## Phase 5: Inventory Database Setup
 An SQLite database (`part_details.db`) was introduced to map detected parts directly to operational metadata. This allows the system to look up pricing and current stock levels dynamically.
+
+## Phase 6: YOLO Detection Bridge
+We built the detection pipeline (`detector.py`) which acts as the bridge between the custom YOLO model and the SQLite database. It extracts class predictions and fetches corresponding database information.
