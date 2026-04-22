@@ -39,3 +39,6 @@ An SQLite database (`part_details.db`) was introduced to map detected parts dire
 
 ## Phase 6: YOLO Detection Bridge
 We built the detection pipeline (`detector.py`) which acts as the bridge between the custom YOLO model and the SQLite database. It extracts class predictions and fetches corresponding database information.
+
+## Phase 7: Web Application Portal
+A Flask web application (`app.py`) was developed to provide an intuitive user interface. Operators can upload spare part photos to run real-time detections, view item pricing and stock levels, and place orders directly.
