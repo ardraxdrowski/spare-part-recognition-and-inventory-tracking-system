@@ -23,8 +23,51 @@
             <div class="card">
                 <h4>{{ item.class }}</h4>
                 <p>Confidence: {{ item.confidence }}</p>
+                {% if item.details %}
+                    <p><strong>Name:</strong> {{ item.details[0] }}</p>
+                    <p><strong>Price:</strong> ₹ {{ item.details[1] }}</p>
+                    <p><strong>Stock:</strong> {{ item.details[2] }}</p>
+                {% endif %}
             </div>
         {% endfor %}
+        <hr>
+        <h3>Place Order</h3>
+        <form id="orderForm">
+            <label>Part Name:</label><br>
+            <select name="part_name" id="part_name">
+                {% for item in detections %}
+                    {% if item.details %}
+                        <option value="{{ item.details[0] }}">{{ item.details[0] }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            <br><br>
+            <label>Quantity:</label><br>
+            <select name="quantity" id="quantity">
+                <option value="1">1</option>
+                <option value="2">2</option>
+            </select>
+            <br><br>
+            <button type="button" onclick="placeOrder()">Confirm Order</button>
+        </form>
     {% endif %}
+    <script>
+    function placeOrder() {
+        const form = document.getElementById("orderForm");
+        const formData = new FormData(form);
+        fetch("/place_order", {
+            method: "POST",
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === "success") {
+                alert("Order placed successfully!");
+            } else {
+                alert(" " + data.message);
+            }
+        });
+    }
+    </script>
 </body>
 </html>
