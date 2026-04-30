@@ -5,69 +5,172 @@
     <style>
         body { font-family: Arial; text-align: center; }
         img { max-width: 500px; margin-top: 20px; }
-        .card { border: 1px solid #ccc; padding: 10px; margin: 10px; display: inline-block; width: 300px; }
+        .card {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px;
+            display: inline-block;
+            width: 300px;
+        }
     </style>
 </head>
+
 <body>
-    <h2>Spare Part Recognition System</h2>
-    <form method="POST" enctype="multipart/form-data">
-        <input type="file" name="image" accept="image/*" required>
-        <br><br>
-        <button type="submit">Submit</button>
-    </form>
-    {% if result_image %}
-        <h3>Detection Result</h3>
-        <img src="{{ result_image }}">
-        <h3>Detected Parts</h3>
+
+<h2>Spare Part Recognition System</h2>
+
+<form method="POST" enctype="multipart/form-data">
+    <input type="file" name="image" accept="image/*" capture="camera" required>
+    <br><br>
+    <button type="submit">Submit</button>
+</form>
+
+{% if result_image %}
+    <h3>Detection Result</h3>
+    <img src="{{ result_image }}">
+
+    <h3>Detected Parts</h3>
+
+    {% for item in detections %}
+        <div class="card">
+            <h4>{{ item.class }}</h4>
+            <p>Confidence: {{ item.confidence }}</p>
+
+            {% if item.details %}
+                <p><strong>Name:</strong> {{ item.details[0] }}</p>
+                <p><strong>Price:</strong> ₹ {{ item.details[1] }}</p>
+                <p><strong>Stock:</strong> {{ item.details[2] }}</p>
+            {% else %}
+                <p>Not found in database</p>
+            {% endif %}
+        </div>
+    {% endfor %}
+{% endif %}
+
+{% if detections and detections|length > 0 %}
+<hr>
+<h3>Place Order</h3>
+
+<form id="orderForm">
+    <label>Part Name:</label><br>
+    <select name="part_name" id="part_name">
         {% for item in detections %}
-            <div class="card">
-                <h4>{{ item.class }}</h4>
-                <p>Confidence: {{ item.confidence }}</p>
-                {% if item.details %}
-                    <p><strong>Name:</strong> {{ item.details[0] }}</p>
-                    <p><strong>Price:</strong> ₹ {{ item.details[1] }}</p>
-                    <p><strong>Stock:</strong> {{ item.details[2] }}</p>
-                {% endif %}
-            </div>
+            {% if item.details %}
+                <option value="{{ item.details[0] }}">
+                    {{ item.details[0] }}
+                </option>
+            {% endif %}
         {% endfor %}
-        <hr>
-        <h3>Place Order</h3>
-        <form id="orderForm">
-            <label>Part Name:</label><br>
-            <select name="part_name" id="part_name">
-                {% for item in detections %}
-                    {% if item.details %}
-                        <option value="{{ item.details[0] }}">{{ item.details[0] }}</option>
-                    {% endif %}
-                {% endfor %}
-            </select>
-            <br><br>
-            <label>Quantity:</label><br>
-            <select name="quantity" id="quantity">
-                <option value="1">1</option>
-                <option value="2">2</option>
-            </select>
-            <br><br>
-            <button type="button" onclick="placeOrder()">Confirm Order</button>
-        </form>
-    {% endif %}
-    <script>
-    function placeOrder() {
-        const form = document.getElementById("orderForm");
-        const formData = new FormData(form);
-        fetch("/place_order", {
-            method: "POST",
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === "success") {
-                alert("Order placed successfully!");
-            } else {
-                alert(" " + data.message);
-            }
-        });
+    </select>
+
+    <br><br>
+
+    <label>Quantity:</label><br>
+    <select name="quantity" id="quantity">
+        <option value="1">1</option>
+        <option value="2">2</option>
+    </select>
+
+    <br><br>
+
+    <button type="button" onclick="placeOrder()">
+        Confirm Order
+    </button>
+</form>
+
+<!-- Replacement Data Popup -->
+<div id="dataPopup" style="display:none; border:1px solid #ccc; padding:20px; margin-top:20px;">
+    <h3>Replacement Data Collection</h3>
+
+    <form id="dataForm">
+
+        <label>Part Name:</label><br>
+        <select name="part_name">
+            <option>Digital Temperature Controller CS 3 H</option>
+            <option>Permanent Magnetic DC Motor 90 V</option>
+            <option>Hand Sealer Control Module W/o CT</option>
+            <option>Control Board CS Smart 90V</option>
+            <option>PCB Assembly 230V HM</option>
+        </select>
+        <br><br>
+
+        <label>Quantity:</label><br>
+        <input type="number" name="quantity" min="1" required>
+        <br><br>
+
+        <label>Date:</label><br>
+        <input type="date" name="date" required>
+        <br><br>
+
+        <label>Reason for Replacement:</label><br>
+        <input type="text" name="reason" required>
+        <br><br>
+
+        <label>Warranty Status:</label><br>
+        <select name="warranty_status">
+            <option>In Warranty</option>
+            <option>Out of Warranty</option>
+        </select>
+        <br><br>
+
+        <button type="button" onclick="saveReplacement()">
+            Submit
+        </button>
+    </form>
+</div>
+<p id="orderMessage"></p>
+{% endif %}
+
+<script>
+function placeOrder() {
+    const form = document.getElementById("orderForm");
+    const formData = new FormData(form);
+
+    fetch("/place_order", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+    if (data.status === "success") {
+        alert("Order placed successfully!");
+
+        //  SHOW DATA COLLECTION POPUP
+        document.getElementById("dataPopup").style.display = "block";
+
+    } else {
+        alert(" " + data.message);
     }
-    </script>
+})
+     
+    .catch(err => {
+        alert("Order failed");
+        console.error(err);
+    });
+}
+function saveReplacement() {
+    const form = document.getElementById("dataForm");
+    const formData = new FormData(form);
+
+    fetch("/save_replacement", {
+        method: "POST",
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === "success") {
+            alert("Data saved!");
+            document.getElementById("dataPopup").style.display = "none";
+        } else {
+            alert("Failed to save data");
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        alert("Error saving data");
+    });
+}
+
+</script>
 </body>
 </html>

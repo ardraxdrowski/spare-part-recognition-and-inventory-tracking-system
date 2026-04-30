@@ -42,3 +42,25 @@ We built the detection pipeline (`detector.py`) which acts as the bridge between
 
 ## Phase 7: Web Application Portal
 A Flask web application (`app.py`) was developed to provide an intuitive user interface. Operators can upload spare part photos to run real-time detections, view item pricing and stock levels, and place orders directly.
+
+## Phase 8: Replacement Logging & Recommendation Engine
+We implemented an inventory recommendation matrix that cross-references part criticality with real-time stock levels (High/Medium/Low) to suggest reorder decisions (e.g., *"Order immediately"*).
+Replacement history (reasons, warranty status, quantities) is logged directly into a structured Excel workbook (`replacement_log.xlsx`) for operational audits.
+
+### Project Setup & Installation
+
+1. **Install dependencies**:
+   ```bash
+   pip install flask ultralytics pandas openpyxl opencv-python
+   ```
+
+2. **Initialize database**:
+   ```bash
+   python create_replaced_parts_table.py
+   ```
+
+3. **Run Flask Application**:
+   ```bash
+   python app.py
+   ```
+   Open `http://127.0.0.1:5000` in your web browser.
