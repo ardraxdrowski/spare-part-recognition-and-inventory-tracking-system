@@ -3,3 +3,7 @@ uploads/
 imageuploads/
 detecttionres/
 dataset/
+robustness_test/generated_datasets/
+robustness_test/results/
+static/*.jpg
+static/*.png

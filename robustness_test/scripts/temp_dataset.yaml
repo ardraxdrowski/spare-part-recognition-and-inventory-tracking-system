@@ -1,0 +1,9 @@
+names:
+  0: Digital Temperature Controller Module
+  1: Permanent Magnetic DC Motor
+  2: Hand Sealer Controller Module w/o CT
+  3: PCB Assembly 230V HM
+  4: Control Board CS Smart 90V
+path: ../generated_datasets\noise_30
+train: images
+val: images
